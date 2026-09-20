@@ -4,15 +4,16 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>ARCADE // CHAT BOT</title>
-<!-- 🎮 Favicon (neon A) -->
+
+<!-- Favicon -->
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2300f0ff'/%3E%3Cstop offset='1' stop-color='%23ff2e97'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='12' fill='%2305010f'/%3E%3Crect x='2' y='2' width='60' height='60' rx='10' fill='none' stroke='url(%23g)' stroke-width='2'/%3E%3Cpath d='M16 44 L32 18 L48 44 Z' fill='none' stroke='%2300f0ff' stroke-width='3' stroke-linejoin='round'/%3E%3Ccircle cx='32' cy='36' r='3' fill='%23ff2e97'/%3E%3C/svg%3E">
+
+<!-- Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
 <style>
-  /* ============================================================
-     ROOT / PALETTE
-     ============================================================ */
   :root {
     --neon-cyan:    #00f0ff;
     --neon-pink:    #ff2e97;
@@ -26,8 +27,12 @@
     --text-dim:     #8a7fc7;
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; overflow: hidden; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { 
+    height: 100%; 
+    overflow: hidden; 
+  }
 
   body {
     font-family: 'Share Tech Mono', 'Courier New', monospace;
@@ -42,9 +47,7 @@
     letter-spacing: 0.5px;
   }
 
-  /* ============================================================
-     BACKGROUND — GRID + SUN + SCANLINES
-     ============================================================ */
+  /* Optimized Background Effects */
   body::before {
     content: '';
     position: fixed;
@@ -53,17 +56,17 @@
       linear-gradient(var(--grid-color) 1px, transparent 1px),
       linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
     background-size: 40px 40px;
-    perspective: 400px;
     z-index: 0;
     animation: gridScroll 12s linear infinite;
     opacity: 0.5;
+    will-change: background-position;
   }
+
   @keyframes gridScroll {
     from { background-position: 0 0; }
     to   { background-position: 0 40px; }
   }
 
-  /* Horizon glow / synthwave sun */
   body::after {
     content: '';
     position: fixed;
@@ -72,17 +75,12 @@
     width: 120vw;
     height: 60vh;
     transform: translateX(-50%);
-    background:
-      radial-gradient(ellipse at center,
-        rgba(255,46,151,0.35) 0%,
-        rgba(176,38,255,0.25) 30%,
-        transparent 70%);
+    background: radial-gradient(ellipse at center, rgba(255,46,151,0.35) 0%, rgba(176,38,255,0.25) 30%, transparent 70%);
     pointer-events: none;
     z-index: 0;
     filter: blur(40px);
   }
 
-  /* Scanlines overlay */
   .scanlines {
     position: fixed;
     inset: 0;
@@ -90,25 +88,15 @@
     z-index: 9999;
     background: repeating-linear-gradient(
       to bottom,
-      rgba(0,0,0,0) 0px,
-      rgba(0,0,0,0) 2px,
+      transparent 0px,
+      transparent 2px,
       rgba(0,240,255,0.03) 3px,
       rgba(0,0,0,0.08) 4px
     );
     mix-blend-mode: overlay;
   }
-  .scanlines::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at center,
-      transparent 40%,
-      rgba(0,0,0,0.5) 100%);
-  }
 
-  /* ============================================================
-     CHAT CABINET
-     ============================================================ */
+  /* Cabinet Overlay */
   .cabinet {
     position: relative;
     width: 100%;
@@ -121,56 +109,33 @@
     flex-direction: column;
     overflow: hidden;
     z-index: 1;
-
-    /* Neon double border */
-    box-shadow:
-      0 0 0 2px var(--neon-cyan),
-      0 0 0 4px var(--bg-deep),
-      0 0 0 6px var(--neon-pink),
-      0 0 40px rgba(0,240,255,0.35),
-      0 0 80px rgba(255,46,151,0.25),
-      inset 0 0 60px rgba(176,38,255,0.08);
-    animation: cabinetPulse 3s ease-in-out infinite;
-  }
-  @keyframes cabinetPulse {
-    0%,100% { box-shadow:
-      0 0 0 2px var(--neon-cyan),
-      0 0 0 4px var(--bg-deep),
-      0 0 0 6px var(--neon-pink),
-      0 0 40px rgba(0,240,255,0.35),
-      0 0 80px rgba(255,46,151,0.25),
-      inset 0 0 60px rgba(176,38,255,0.08); }
-    50% { box-shadow:
-      0 0 0 2px var(--neon-cyan),
-      0 0 0 4px var(--bg-deep),
-      0 0 0 6px var(--neon-pink),
-      0 0 60px rgba(0,240,255,0.55),
-      0 0 120px rgba(255,46,151,0.4),
-      inset 0 0 80px rgba(176,38,255,0.15); }
+    border: 2px solid var(--neon-cyan);
+    box-shadow: 
+      0 0 0 2px var(--bg-deep),
+      0 0 0 4px var(--neon-pink),
+      0 0 25px rgba(0,240,255,0.3);
   }
 
-  /* ============================================================
-     HEADER
-     ============================================================ */
+  /* Header Section */
   header {
     padding: 16px 22px;
-    background:
-      linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(13,6,40,0.9) 100%);
+    background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(13,6,40,0.9) 100%);
     border-bottom: 1px solid rgba(0,240,255,0.3);
     display: flex;
     align-items: center;
     gap: 14px;
     position: relative;
   }
+
   header::after {
     content: '';
     position: absolute;
     left: 0; right: 0; bottom: 0;
     height: 1px;
-    background: linear-gradient(90deg,
-      transparent, var(--neon-cyan), var(--neon-pink), transparent);
+    background: linear-gradient(90deg, transparent, var(--neon-cyan), var(--neon-pink), transparent);
     animation: headerScan 3s linear infinite;
   }
+
   @keyframes headerScan {
     0%   { transform: translateX(-100%); }
     100% { transform: translateX(100%); }
@@ -180,16 +145,11 @@
     font-family: 'Orbitron', sans-serif;
     font-weight: 900;
     font-size: 20px;
-    line-height: 1;
     letter-spacing: 3px;
     color: var(--neon-cyan);
-    text-shadow:
-      0 0 6px var(--neon-cyan),
-      0 0 18px var(--neon-cyan),
-      0 0 32px var(--neon-cyan);
-    position: relative;
-    animation: flicker 4s infinite;
+    text-shadow: 0 0 10px var(--neon-cyan);
   }
+
   .logo small {
     display: block;
     font-family: 'Share Tech Mono', monospace;
@@ -199,19 +159,6 @@
     letter-spacing: 4px;
     margin-top: 4px;
     text-shadow: 0 0 8px var(--neon-pink);
-  }
-  @keyframes flicker {
-    0%,19%,21%,23%,25%,54%,56%,100% {
-      opacity: 1;
-      text-shadow:
-        0 0 6px var(--neon-cyan),
-        0 0 18px var(--neon-cyan),
-        0 0 32px var(--neon-cyan);
-    }
-    20%,24%,55% {
-      opacity: 0.75;
-      text-shadow: none;
-    }
   }
 
   .status-block {
@@ -224,19 +171,23 @@
     text-transform: uppercase;
     letter-spacing: 1.5px;
   }
+
   .led {
-    width: 10px; height: 10px;
+    width: 10px; 
+    height: 10px;
     border-radius: 50%;
     background: var(--neon-green);
-    box-shadow: 0 0 10px var(--neon-green), 0 0 20px var(--neon-green);
+    box-shadow: 0 0 10px var(--neon-green);
     animation: ledBlink 1.6s ease-in-out infinite;
     flex-shrink: 0;
   }
-  .led.busy { background: var(--neon-yellow); box-shadow: 0 0 10px var(--neon-yellow), 0 0 20px var(--neon-yellow); }
-  .led.error{ background: #ff3b3b; box-shadow: 0 0 10px #ff3b3b, 0 0 20px #ff3b3b; }
+
+  .led.busy { background: var(--neon-yellow); box-shadow: 0 0 10px var(--neon-yellow); }
+  .led.error { background: #ff3b3b; box-shadow: 0 0 10px #ff3b3b; }
+
   @keyframes ledBlink {
-    0%,100% { opacity: 1; }
-    50%     { opacity: 0.4; }
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.4; }
   }
 
   .model-select {
@@ -251,18 +202,17 @@
     cursor: pointer;
     outline: none;
     text-transform: uppercase;
-    transition: all 0.2s;
-    box-shadow: 0 0 10px rgba(0,240,255,0.3), inset 0 0 10px rgba(0,240,255,0.05);
+    transition: all 0.2s ease;
   }
+
   .model-select:hover, .model-select:focus {
     background: rgba(0,240,255,0.1);
-    box-shadow: 0 0 20px rgba(0,240,255,0.6), inset 0 0 14px rgba(0,240,255,0.1);
+    box-shadow: 0 0 12px rgba(0,240,255,0.5);
   }
+
   .model-select option { background: #0a0420; color: #e6e0ff; }
 
-  /* ============================================================
-     MESSAGES
-     ============================================================ */
+  /* Message Stream */
   #messages {
     flex: 1;
     padding: 26px 22px;
@@ -276,12 +226,11 @@
       radial-gradient(ellipse at top, rgba(176,38,255,0.06), transparent 60%),
       radial-gradient(ellipse at bottom, rgba(0,240,255,0.05), transparent 60%);
   }
-  #messages::-webkit-scrollbar { width: 8px; }
-  #messages::-webkit-scrollbar-track { background: transparent; }
+
+  #messages::-webkit-scrollbar { width: 6px; }
   #messages::-webkit-scrollbar-thumb {
     background: linear-gradient(180deg, var(--neon-cyan), var(--neon-pink));
-    border-radius: 4px;
-    box-shadow: 0 0 8px var(--neon-cyan);
+    border-radius: 3px;
   }
 
   .msg {
@@ -291,29 +240,25 @@
     line-height: 1.6;
     font-size: 14px;
     white-space: pre-wrap;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
+    word-break: break-word;
     position: relative;
-    animation: msgIn 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.2) both;
-    backdrop-filter: blur(4px);
-  }
-  @keyframes msgIn {
-    from { opacity: 0; transform: translateY(8px) scale(0.97); filter: blur(4px); }
-    to   { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+    animation: msgIn 0.25s ease-out forwards;
   }
 
-  /* USER bubble — neon pink */
+  @keyframes msgIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
   .msg.user {
     align-self: flex-end;
     background: linear-gradient(135deg, rgba(255,46,151,0.18), rgba(176,38,255,0.18));
     border: 1px solid var(--neon-pink);
     color: #ffd6ec;
     border-bottom-right-radius: 2px;
-    box-shadow:
-      0 0 12px rgba(255,46,151,0.4),
-      inset 0 0 20px rgba(255,46,151,0.08);
-    text-shadow: 0 0 6px rgba(255,46,151,0.5);
+    box-shadow: 0 0 10px rgba(255,46,151,0.3);
   }
+
   .msg.user::before {
     content: '▶ YOU';
     position: absolute;
@@ -323,21 +268,17 @@
     color: var(--neon-pink);
     background: var(--bg-panel);
     padding: 0 6px;
-    text-shadow: 0 0 6px var(--neon-pink);
   }
 
-  /* BOT bubble — neon cyan */
   .msg.bot {
     align-self: flex-start;
     background: linear-gradient(135deg, rgba(0,240,255,0.10), rgba(176,38,255,0.10));
     border: 1px solid var(--neon-cyan);
     color: #d4faff;
     border-bottom-left-radius: 2px;
-    box-shadow:
-      0 0 12px rgba(0,240,255,0.35),
-      inset 0 0 20px rgba(0,240,255,0.06);
-    text-shadow: 0 0 6px rgba(0,240,255,0.4);
+    box-shadow: 0 0 10px rgba(0,240,255,0.25);
   }
+
   .msg.bot::before {
     content: '◆ ARCADE';
     position: absolute;
@@ -347,55 +288,40 @@
     color: var(--neon-cyan);
     background: var(--bg-panel);
     padding: 0 6px;
-    text-shadow: 0 0 6px var(--neon-cyan);
   }
 
-  /* ERROR bubble — red glitch */
   .msg.error {
     align-self: flex-start;
     background: rgba(255,0,60,0.12);
     border: 1px solid #ff3b3b;
     color: #ffb3b3;
     border-bottom-left-radius: 2px;
-    box-shadow: 0 0 14px rgba(255,59,59,0.5);
-    animation: glitchShake 0.4s ease-out, msgIn 0.3s ease-out;
-  }
-  @keyframes glitchShake {
-    0%,100% { transform: translateX(0); }
-    25% { transform: translateX(-4px); }
-    50% { transform: translateX(4px); }
-    75% { transform: translateX(-2px); }
   }
 
-  /* Typing indicator */
   .typing { display: inline-flex; gap: 5px; align-items: center; padding: 4px 0; }
   .typing span {
     width: 8px; height: 8px;
     background: var(--neon-cyan);
     border-radius: 50%;
-    box-shadow: 0 0 10px var(--neon-cyan), 0 0 18px var(--neon-cyan);
     animation: bounce 1.1s infinite;
   }
-  .typing span:nth-child(2) { animation-delay: .15s; background: var(--neon-pink); box-shadow: 0 0 10px var(--neon-pink); }
-  .typing span:nth-child(3) { animation-delay: .3s;  background: var(--neon-purple); box-shadow: 0 0 10px var(--neon-purple); }
+  .typing span:nth-child(2) { animation-delay: .15s; background: var(--neon-pink); }
+  .typing span:nth-child(3) { animation-delay: .3s;  background: var(--neon-purple); }
+
   @keyframes bounce {
     0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
-    30% { transform: translateY(-7px); opacity: 1; }
+    30% { transform: translateY(-6px); opacity: 1; }
   }
 
-  /* Cursor while streaming */
   .streaming::after {
     content: '▋';
     color: var(--neon-cyan);
-    animation: blink 0.9s steps(1) infinite;
+    animation: blink 0.8s steps(1) infinite;
     margin-left: 2px;
-    text-shadow: 0 0 8px var(--neon-cyan);
   }
   @keyframes blink { 50% { opacity: 0; } }
 
-  /* ============================================================
-     INPUT BAR
-     ============================================================ */
+  /* Input Panel */
   form {
     display: flex;
     padding: 16px;
@@ -403,15 +329,6 @@
     background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(13,6,40,0.9) 100%);
     border-top: 1px solid rgba(255,46,151,0.3);
     position: relative;
-  }
-  form::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(90deg,
-      transparent, var(--neon-pink), var(--neon-cyan), transparent);
-    animation: headerScan 4s linear infinite reverse;
   }
 
   textarea {
@@ -428,21 +345,12 @@
     outline: none;
     height: 52px;
     max-height: 160px;
-    transition: all 0.2s;
-    letter-spacing: 0.5px;
-    text-shadow: 0 0 6px rgba(0,240,255,0.4);
-    box-shadow: inset 0 0 12px rgba(0,240,255,0.06);
+    transition: border-color 0.2s, box-shadow 0.2s;
   }
-  textarea::placeholder {
-    color: rgba(138,127,199,0.6);
-    letter-spacing: 1px;
-  }
+
   textarea:focus {
     border-color: var(--neon-cyan);
-    box-shadow:
-      0 0 18px rgba(0,240,255,0.5),
-      inset 0 0 18px rgba(0,240,255,0.1);
-    background: rgba(0,240,255,0.04);
+    box-shadow: 0 0 12px rgba(0,240,255,0.4);
   }
 
   .btn {
@@ -452,47 +360,39 @@
     font-size: 12px;
     letter-spacing: 2px;
     cursor: pointer;
-    transition: all 0.15s;
+    transition: transform 0.15s, box-shadow 0.15s;
     height: 52px;
     padding: 0 22px;
     text-transform: uppercase;
-    position: relative;
-    overflow: hidden;
   }
 
   #send {
     background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
     color: #fff;
     border: 1px solid var(--neon-pink);
-    box-shadow:
-      0 0 14px rgba(255,46,151,0.6),
-      inset 0 0 18px rgba(255,255,255,0.15);
-    text-shadow: 0 0 8px rgba(255,255,255,0.8);
+    box-shadow: 0 0 12px rgba(255,46,151,0.5);
   }
+
   #send:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow:
-      0 0 28px rgba(255,46,151,0.9),
-      0 0 50px rgba(255,46,151,0.5),
-      inset 0 0 22px rgba(255,255,255,0.2);
+    box-shadow: 0 0 20px rgba(255,46,151,0.8);
   }
+
   #send:disabled { opacity: 0.4; cursor: not-allowed; filter: grayscale(0.6); }
 
   #clear {
     background: transparent;
     color: var(--neon-cyan);
     border: 1px solid var(--neon-cyan);
-    box-shadow: 0 0 10px rgba(0,240,255,0.35), inset 0 0 10px rgba(0,240,255,0.05);
-    text-shadow: 0 0 6px var(--neon-cyan);
-  }
-  #clear:hover {
-    background: rgba(0,240,255,0.1);
-    box-shadow: 0 0 22px rgba(0,240,255,0.8), inset 0 0 16px rgba(0,240,255,0.15);
+    box-shadow: 0 0 8px rgba(0,240,255,0.25);
   }
 
-  /* ============================================================
-     BOOT SCREEN
-     ============================================================ */
+  #clear:hover {
+    background: rgba(0,240,255,0.1);
+    box-shadow: 0 0 16px rgba(0,240,255,0.6);
+  }
+
+  /* Boot Overlay Screen */
   .boot {
     position: absolute;
     inset: 0;
@@ -504,35 +404,29 @@
     padding: 40px;
     font-size: 13px;
     color: var(--neon-green);
-    text-shadow: 0 0 8px var(--neon-green);
-    transition: opacity 0.6s ease;
+    text-shadow: 0 0 6px var(--neon-green);
+    transition: opacity 0.4s ease;
     pointer-events: none;
   }
-  .boot.hidden { opacity: 0; }
-  .boot .line { opacity: 0; animation: bootLine 0.25s forwards; }
-  .boot .line:nth-child(1) { animation-delay: 0.05s; }
-  .boot .line:nth-child(2) { animation-delay: 0.25s; }
-  .boot .line:nth-child(3) { animation-delay: 0.45s; }
-  .boot .line:nth-child(4) { animation-delay: 0.65s; }
-  .boot .line:nth-child(5) { animation-delay: 0.85s; }
-  .boot .line:nth-child(6) { animation-delay: 1.05s; }
-  .boot .line:nth-child(7) { animation-delay: 1.25s; }
-  @keyframes bootLine {
-    to { opacity: 1; }
-  }
-  .boot .ok { color: var(--neon-cyan); text-shadow: 0 0 8px var(--neon-cyan); }
-  .boot .warn { color: var(--neon-yellow); text-shadow: 0 0 8px var(--neon-yellow); }
 
-  /* Mobile tweaks */
+  .boot.hidden { opacity: 0; }
+  .boot .line { opacity: 0; animation: bootLine 0.2s forwards; }
+  .boot .line:nth-child(1) { animation-delay: 0.05s; }
+  .boot .line:nth-child(2) { animation-delay: 0.2s; }
+  .boot .line:nth-child(3) { animation-delay: 0.35s; }
+  .boot .line:nth-child(4) { animation-delay: 0.5s; }
+  .boot .line:nth-child(5) { animation-delay: 0.65s; }
+
+  @keyframes bootLine { to { opacity: 1; } }
+  .boot .ok { color: var(--neon-cyan); }
+  .boot .warn { color: var(--neon-yellow); }
+
   @media (max-width: 640px) {
     body { padding: 0; }
     .cabinet { height: 100vh; max-height: none; border-radius: 0; }
-    .logo { font-size: 16px; letter-spacing: 2px; }
-    .logo small { font-size: 9px; }
-    .msg { max-width: 88%; font-size: 13px; }
-    .btn { padding: 0 14px; font-size: 11px; }
-    header { padding: 12px 14px; gap: 8px; }
-    .status-block span:not(.led) { display: none; }
+    .logo { font-size: 16px; }
+    .msg { max-width: 90%; font-size: 13px; }
+    .btn { padding: 0 12px; font-size: 10px; }
   }
 </style>
 </head>
@@ -540,20 +434,17 @@
 
 <div class="scanlines"></div>
 
-<div class="cabinet">
-
-  <!-- BOOT SCREEN -->
+<main class="cabinet">
+  <!-- Boot Screen Overlay -->
   <div class="boot" id="boot">
     <div class="line">&gt; ARCADE.SYS v2.077</div>
-    <div class="line">&gt; initializing neural matrix.......... <span class="ok">OK</span></div>
-    <div class="line">&gt; mounting neon grid................... <span class="ok">OK</span></div>
+    <div class="line">&gt; initializing matrix.......... <span class="ok">OK</span></div>
     <div class="line">&gt; establishing uplink.................. <span class="ok">OK</span></div>
-    <div class="line">&gt; loading model: GPT-4o-mini........... <span class="ok">OK</span></div>
-    <div class="line">&gt; bypassing ICE........................ <span class="warn">[!]</span></div>
+    <div class="line">&gt; loading neural framework........... <span class="ok">OK</span></div>
     <div class="line">&gt; welcome to <span class="ok">ARCADE CHAT BOT</span></div>
   </div>
 
-  <!-- HEADER -->
+  <!-- Header -->
   <header>
     <div class="logo">
       ARCADE
@@ -565,7 +456,7 @@
       <span id="status">ONLINE</span>
     </div>
 
-    <select class="model-select" id="model" title="Select model">
+    <select class="model-select" id="model" aria-label="Select AI Model">
       <option value="openai/gpt-4o-mini" selected>GPT-4o mini</option>
       <option value="openai/gpt-4o">GPT-4o</option>
       <option value="anthropic/claude-3.5-sonnet">Claude 3.5</option>
@@ -574,27 +465,33 @@
     </select>
   </header>
 
-  <!-- MESSAGES -->
-  <div id="messages"></div>
+  <!-- Message Stream -->
+  <section id="messages" role="log" aria-live="polite"></section>
 
-  <!-- INPUT -->
+  <!-- Input Form -->
   <form id="chat-form">
-    <textarea id="input" placeholder="> enter transmission_" autofocus></textarea>
-    <button id="clear" class="btn" type="button" title="New session">Reset</button>
-    <button id="send"  class="btn" type="submit">Send</button>
+    <textarea id="input" placeholder="> enter transmission_" autofocus aria-label="Transmission Input"></textarea>
+    <button id="clear" class="btn" type="button">Reset</button>
+    <button id="send" class="btn" type="submit">Send</button>
   </form>
-</div>
+</main>
 
 <script>
-/* =========================================================
-   CONFIG — your key (visible by design)
-   ⚠️ Set a credit limit at openrouter.ai/keys
-   ========================================================= */
-const API_KEY = "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";
-const API_URL = "https://openrouter.ai/api/v1/chat/completions";
-const SYSTEM_PROMPT = "You are Arcade, a witty, cyberpunk-themed AI assistant. Answer helpfully with a subtle futuristic tone, but stay concise and useful. Never refuse a normal request.";
+/**
+ * SECURITY NOTE:
+ * Do not publish API keys directly to client-side code.
+ * Load or prompt the key at runtime for end-user deployment.
+ */
+let API_KEY = localStorage.getItem("OPENROUTER_API_KEY") || "";
 
-/* DOM */
+if (!API_KEY) {
+  API_KEY = prompt("Enter your OpenRouter API Key to proceed:") || "";
+  if (API_KEY) localStorage.setItem("OPENROUTER_API_KEY", API_KEY);
+}
+
+const API_URL = "https://openrouter.ai/api/v1/chat/completions";
+const SYSTEM_PROMPT = "You are Arcade, a witty, cyberpunk-themed AI assistant. Answer helpfully with a subtle futuristic tone, stay concise, and execute user commands accurately.";
+
 const messagesEl = document.getElementById("messages");
 const form       = document.getElementById("chat-form");
 const input      = document.getElementById("input");
@@ -605,24 +502,24 @@ const statusEl   = document.getElementById("status");
 const ledEl      = document.getElementById("led");
 const bootEl     = document.getElementById("boot");
 
-/* State */
 let history = [{ role: "system", content: SYSTEM_PROMPT }];
 let isBusy  = false;
 
-/* =========================================================
-   UI HELPERS
-   ========================================================= */
 function setStatus(text, state = "ok") {
   statusEl.textContent = text;
   ledEl.className = "led" + (state === "busy" ? " busy" : state === "error" ? " error" : "");
 }
 
+function scrollToBottom() {
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
 function addMessage(text, cls) {
   const d = document.createElement("div");
-  d.className = "msg " + cls;
+  d.className = `msg ${cls}`;
   d.textContent = text;
   messagesEl.appendChild(d);
-  messagesEl.scrollTop = messagesEl.scrollHeight;
+  scrollToBottom();
   return d;
 }
 
@@ -631,20 +528,23 @@ function addTyping() {
   d.className = "msg bot";
   d.innerHTML = '<div class="typing"><span></span><span></span><span></span></div>';
   messagesEl.appendChild(d);
-  messagesEl.scrollTop = messagesEl.scrollHeight;
+  scrollToBottom();
   return d;
 }
 
 function autoGrow(el) {
   el.style.height = "52px";
-  el.style.height = Math.min(el.scrollHeight, 160) + "px";
+  el.style.height = `${Math.min(el.scrollHeight, 160)}px`;
 }
 
-/* =========================================================
-   CORE
-   ========================================================= */
 async function sendMessage(userText) {
   if (isBusy) return;
+
+  if (!API_KEY) {
+    addMessage("⚠ Missing API Key. Refresh page to enter your credentials.", "error");
+    return;
+  }
+
   isBusy = true;
   sendBtn.disabled = true;
   setStatus("PROCESSING…", "busy");
@@ -659,9 +559,9 @@ async function sendMessage(userText) {
     const res = await fetch(API_URL, {
       method: "POST",
       headers: {
-        "Authorization": "Bearer " + API_KEY,
+        "Authorization": `Bearer ${API_KEY}`,
         "Content-Type": "application/json",
-        "HTTP-Referer": location.origin || "http://localhost",
+        "HTTP-Referer": window.location.origin || "http://localhost",
         "X-Title": "Arcade Chat Bot"
       },
       body: JSON.stringify({
@@ -673,31 +573,33 @@ async function sendMessage(userText) {
 
     if (!res.ok) {
       let detail = "";
-      try { detail = (await res.json())?.error?.message || ""; } catch {}
-      if (res.status === 401) throw new Error("AUTH FAILURE — " + (detail || "invalid or revoked key"));
-      if (res.status === 402) throw new Error("INSUFFICIENT CREDITS — switch to the free Llama model");
-      if (res.status === 429) throw new Error("RATE LIMIT — cool down and retry");
-      throw new Error("HTTP " + res.status + (detail ? " — " + detail : ""));
+      try { const errJson = await res.json(); detail = errJson?.error?.message || ""; } catch {}
+      if (res.status === 401) throw new Error("AUTH FAILURE — Invalid key supplied.");
+      if (res.status === 402) throw new Error("INSUFFICIENT CREDITS — Switch model or top up account.");
+      throw new Error(`HTTP ${res.status} ${detail ? "— " + detail : ""}`);
     }
 
-    const reader  = res.body.getReader();
-    const decoder = new TextDecoder();
-    let buffer = "", firstChunk = true;
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder("utf-8");
+    let buffer = "";
+    let firstChunk = true;
 
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
+
       buffer += decoder.decode(value, { stream: true });
       const lines = buffer.split("\n");
       buffer = lines.pop() || "";
 
-      for (const raw of lines) {
-        const line = raw.trim();
-        if (!line.startsWith("data:")) continue;
-        const data = line.slice(5).trim();
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed.startsWith("data:")) continue;
+        const data = trimmed.slice(5).trim();
         if (data === "[DONE]") continue;
+
         try {
-          const json  = JSON.parse(data);
+          const json = JSON.parse(data);
           const delta = json.choices?.[0]?.delta?.content || "";
           if (delta) {
             if (firstChunk) {
@@ -707,9 +609,9 @@ async function sendMessage(userText) {
             }
             fullReply += delta;
             botDiv.textContent = fullReply;
-            messagesEl.scrollTop = messagesEl.scrollHeight;
+            scrollToBottom();
           }
-        } catch (_) { /* partial json */ }
+        } catch (_) {}
       }
     }
 
@@ -720,9 +622,8 @@ async function sendMessage(userText) {
 
   } catch (err) {
     botDiv.className = "msg error";
-    botDiv.textContent = "⚠ " + err.message;
+    botDiv.textContent = `⚠ ${err.message}`;
     setStatus("ERROR", "error");
-    console.error(err);
   } finally {
     isBusy = false;
     sendBtn.disabled = false;
@@ -730,16 +631,14 @@ async function sendMessage(userText) {
   }
 }
 
-/* =========================================================
-   EVENTS
-   ========================================================= */
+/* Event Handlers */
 form.addEventListener("submit", (e) => {
   e.preventDefault();
-  const t = input.value.trim();
-  if (!t || isBusy) return;
+  const text = input.value.trim();
+  if (!text || isBusy) return;
   input.value = "";
   autoGrow(input);
-  sendMessage(t);
+  sendMessage(text);
 });
 
 input.addEventListener("input", () => autoGrow(input));
@@ -755,35 +654,20 @@ clearBtn.addEventListener("click", () => {
   if (isBusy) return;
   history = [{ role: "system", content: SYSTEM_PROMPT }];
   messagesEl.innerHTML = "";
-  addMessage(
-    "Session reset.\n\n> ARCADE ONLINE\n> ready for input_\n> ask me anything, choom.",
-    "bot"
-  );
+  addMessage("Session reset.\n\n> ARCADE ONLINE\n> ready for input_\n> ask me anything, choom.", "bot");
   setStatus("ONLINE");
   input.focus();
 });
 
-/* =========================================================
-   BOOT + GREETING
-   ========================================================= */
 window.addEventListener("load", () => {
   setTimeout(() => {
     bootEl.classList.add("hidden");
-    setTimeout(() => bootEl.remove(), 700);
+    setTimeout(() => bootEl.remove(), 500);
 
-    addMessage(
-      "> ARCADE.SYS v2.077\n> neural matrix: ONLINE\n> link established.\n\nHey choom — I'm Arcade. Ask me anything.",
-      "bot"
-    );
+    addMessage("> ARCADE.SYS v2.077\n> neural matrix: ONLINE\n\nHey choom — I'm Arcade. Ready when you are.", "bot");
     input.focus();
-  }, 1600);
+  }, 1000);
 });
-
-console.log(
-  "%c ARCADE CHAT BOT ",
-  "background: linear-gradient(90deg,#ff2e97,#00f0ff); color:#000; font-weight:bold; padding:4px 10px; border-radius:4px; font-family: monospace;"
-);
-console.log("Key in use:", API_KEY.slice(0, 12) + "…" + API_KEY.slice(-4));
 </script>
 </body>
 </html>
